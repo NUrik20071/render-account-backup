@@ -1,0 +1,36 @@
+# Render Blueprint for the constructor project.
+# Syncing creates new resources in the selected Render workspace.
+# It does not transfer data or adopt services from the old account.
+
+services:
+  - type: web
+    name: skin-drop-bot
+    runtime: python
+    region: frankfurt
+    plan: free
+    repo: https://github.com/NUrik20071/Bot
+    branch: skin-drop-bot-deploy
+    buildCommand: pip install -r skin_drop_bot/requirements.txt
+    startCommand: python skin_drop_bot/main.py
+
+  - type: web
+    name: maghazin-tovarov
+    runtime: node
+    region: oregon
+    plan: free
+    repo: https://github.com/NUrik20071/Magazine-
+    branch: main
+    buildCommand: python3 -m venv .venv-media && .venv-media/bin/pip install --disable-pip-version-check --no-cache-dir yt-dlp gallery-dl && corepack enable && pnpm install --frozen-lockfile && pnpm --filter @workspace/product-store run build && pnpm --filter @workspace/api-server run build
+    startCommand: pnpm --filter @workspace/api-server run start
+    healthCheckPath: /api/healthz
+
+  - type: web
+    name: Constructor
+    runtime: node
+    region: oregon
+    plan: free
+    repo: https://github.com/NUrik20071/Magazine-
+    branch: main
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @workspace/product-store run build && pnpm --filter @workspace/api-server run build
+    startCommand: pnpm --filter @workspace/api-server run start
+    healthCheckPath: /api/healthz
