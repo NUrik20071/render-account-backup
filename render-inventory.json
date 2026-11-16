@@ -1,0 +1,67 @@
+{
+  "snapshotDate": "2026-11-16",
+  "workspace": {
+    "name": "My Workspace",
+    "id": "tea-db6umfd9fdbs73eehtfg"
+  },
+  "services": [
+    {
+      "name": "skin-drop-bot",
+      "id": "srv-dbbcbn8m7kps73efbk6g",
+      "type": "web",
+      "runtime": "python",
+      "region": "frankfurt",
+      "plan": "free",
+      "repository": "https://github.com/NUrik20071/Bot",
+      "branch": "skin-drop-bot-deploy",
+      "buildCommand": "pip install -r skin_drop_bot/requirements.txt",
+      "startCommand": "python skin_drop_bot/main.py",
+      "url": "https://skin-drop-bot.onrender.com"
+    },
+    {
+      "name": "maghazin-tovarov",
+      "id": "srv-dbaqbjc9v7es739hijmg",
+      "type": "web",
+      "runtime": "node",
+      "region": "oregon",
+      "plan": "free",
+      "repository": "https://github.com/NUrik20071/Magazine-",
+      "branch": "main",
+      "buildCommand": "python3 -m venv .venv-media && .venv-media/bin/pip install --disable-pip-version-check --no-cache-dir yt-dlp gallery-dl && corepack enable && pnpm install --frozen-lockfile && pnpm --filter @workspace/product-store run build && pnpm --filter @workspace/api-server run build",
+      "startCommand": "pnpm --filter @workspace/api-server run start",
+      "healthCheckPath": "/api/healthz",
+      "url": "https://maghazin-tovarov-d6ah.onrender.com"
+    },
+    {
+      "name": "Constructor",
+      "id": "srv-db6vlfid0e5s73ahfu4g",
+      "type": "web",
+      "runtime": "node",
+      "region": "oregon",
+      "plan": "free",
+      "repository": "https://github.com/NUrik20071/Magazine-",
+      "branch": "main",
+      "buildCommand": "corepack enable && pnpm install --frozen-lockfile && pnpm --filter @workspace/product-store run build && pnpm --filter @workspace/api-server run build",
+      "startCommand": "pnpm --filter @workspace/api-server run start",
+      "healthCheckPath": "/api/healthz",
+      "url": "https://maghazin-tovarov.onrender.com"
+    }
+  ],
+  "postgres": [
+    {
+      "name": "maghazin-tovarov-db",
+      "id": "dpg-db6vl52d0e5s73aherqg-a",
+      "version": "18",
+      "region": "oregon",
+      "plan": "free",
+      "databaseName": "maghazin_tovarov_y4kt",
+      "user": "maghazin_tovarov",
+      "statusAtSnapshot": "suspended",
+      "suspensionReason": "billing",
+      "listedExpiresAt": "2026-11-12T09:32:05.57257Z",
+      "dataExported": false
+    }
+  ],
+  "keyValue": [],
+  "secretsIncluded": false
+}
