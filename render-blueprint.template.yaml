@@ -1,0 +1,42 @@
+# Render Blueprint reconstruction template.
+# CAUTION: syncing this file can CREATE three new web services.
+# It does not attach/adopt the existing services in the source workspace.
+# Review names, environment variables, and destination plan before syncing.
+
+services:
+  - type: web
+    name: skin-drop-bot
+    runtime: python
+    region: frankfurt
+    plan: free
+    repo: https://github.com/NUrik20071/Bot
+    branch: skin-drop-bot-deploy
+    buildCommand: pip install -r skin_drop_bot/requirements.txt
+    startCommand: python skin_drop_bot/main.py
+
+  - type: web
+    name: maghazin-tovarov
+    runtime: node
+    region: oregon
+    plan: free
+    repo: https://github.com/NUrik20071/Magazine-
+    branch: main
+    buildCommand: python3 -m venv .venv-media && .venv-media/bin/pip install --disable-pip-version-check --no-cache-dir yt-dlp gallery-dl && corepack enable && pnpm install --frozen-lockfile && pnpm --filter @workspace/product-store run build && pnpm --filter @workspace/api-server run build
+    startCommand: pnpm --filter @workspace/api-server run start
+    healthCheckPath: /api/healthz
+
+  - type: web
+    name: Constructor
+    runtime: node
+    region: oregon
+    plan: free
+    repo: https://github.com/NUrik20071/Magazine-
+    branch: main
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @workspace/product-store run build && pnpm --filter @workspace/api-server run build
+    startCommand: pnpm --filter @workspace/api-server run start
+    healthCheckPath: /api/healthz
+
+# PostgreSQL metadata is recorded in render-inventory.json.
+# The source database was suspended by billing and its listed expiry date
+# had passed at snapshot time. Do NOT provision a replacement database
+# from this snapshot until you decide on a recovery/migration strategy.
